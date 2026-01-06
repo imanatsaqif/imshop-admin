@@ -1,0 +1,13 @@
+/* Font face */
+@use '@blibli/blue-font/dist/_blue-font-blibli' as *;
+
+/* Design tokens */
+@use '@blibli/blue-design-tokens/dist/web/scss/tokens-default' as tokens;
+
+/* Global styling */
+body {
+  font-family: tokens.$blu-font-family-body-text;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 20px;
+}
