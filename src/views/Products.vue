@@ -1,7 +1,8 @@
 <!-- views/Products.vue -->
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { onMounted } from 'vue';
 import { useProducts } from '@/composables/useProducts';
+import { usePriceFilter } from '@/composables/usePriceFilter';
 
 const {
     products,
@@ -12,34 +13,12 @@ const {
     fetchProducts
 } = useProducts()
 
-const minPrice = ref(0)
-const maxPrice = ref(1000)
-
-// computed filter harga local
-const filteredPrice = computed(() => {
-    console.log('computed')
-
-    // pastikan products ada isinya
-    if (!products.value.length) return []
-
-    // pastikan min dan max adalah angka, default min 0, max infinity
-    const min = Number(minPrice.value) || 0
-    const max = Number(maxPrice.value) || Infinity
-
-    return products.value.filter(product => {
-        return product.price >= min && product.price <= max
-    })
-})
-
-//validator input harga
-watch([minPrice, maxPrice], ([min, max]) => {
-    if (min > max) {
-        error.value = "Maksimal tidak boleh lebih dari minimal"
-    } else {
-        error.value = null
-    }
-})
-
+const {
+    minPrice,
+    maxPrice,
+    priceError,
+    filteredPrice
+} = usePriceFilter(products)
 
 onMounted(() => {
     fetchProducts()
@@ -69,7 +48,7 @@ onMounted(() => {
             <span>-</span>
             <label for="maxPrice">Harga Maksimal ($)</label>
             <input id="maxPrice" type="number" v-model.number="maxPrice" :min="minPrice" placeholder="1000">
-            <p v-if="error">{{ error }}</p>
+            <p v-if="priceError">{{ priceError }}</p>
         </div>
     </div>
     <hr>
