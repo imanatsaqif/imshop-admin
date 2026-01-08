@@ -1,14 +1,11 @@
 // src/composables/useProducts
 import { ref } from "vue";
-import axios from "axios";
+import { fetchProducts } from "@/services/productServices";
 
 export function useProducts() {
-    //API_URL
-    const API_URL = 'https://dummyjson.com/products'
-
     //state
     const products = ref([])
-    const loading = ref(true)
+    const loading = ref(false)
     const error = ref(null)
 
     //parameter reaktif
@@ -16,17 +13,14 @@ export function useProducts() {
     const skipProduct = ref(0)
 
     //fetch produk dengan filtering server side
-    const fetchProducts = async () => {
+    const getProducts = async () => {
         try {
             loading.value = true
-            const response = await axios.get(API_URL, {
-                params: {
-                    limit: limitProduct.value,
-                    skip: skipProduct.value
-                }
+            const response = await fetchProducts({
+                limit: limitProduct,
+                skip: skipProduct
             })
             products.value = response.data.products
-            console.log(response.data)
         } catch (err) {
             error.value = err.message
             console.error('error fecthing products:', err)
@@ -41,6 +35,6 @@ export function useProducts() {
         error,
         limitProduct,
         skipProduct,
-        fetchProducts
+        getProducts
     }
 }
