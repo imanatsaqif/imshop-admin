@@ -17,8 +17,8 @@ export function useProducts() {
         try {
             loading.value = true
             const response = await fetchProducts({
-                limit: limitProduct,
-                skip: skipProduct
+                limit: limitProduct.value,
+                skip: skipProduct.value
             })
             products.value = response.data.products
         } catch (err) {

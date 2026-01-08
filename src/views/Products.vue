@@ -10,7 +10,7 @@ const {
     error,
     limitProduct,
     skipProduct,
-    fetchProducts
+    getProducts
 } = useProducts()
 
 const {
@@ -21,7 +21,7 @@ const {
 } = usePriceFilter(products)
 
 onMounted(() => {
-    fetchProducts()
+    getProducts()
 })
 </script>
 
@@ -38,7 +38,7 @@ onMounted(() => {
             <span>skip</span>
             <input type="number" v-model="skipProduct"></input>
             <br>
-            <bliButton @click="fetchProducts()">Search</bliButton>
+            <bliButton @click="getProducts()">Search</bliButton>
         </div>
         <div>
             <!-- filtering locally -->
