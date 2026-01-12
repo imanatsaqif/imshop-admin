@@ -1,15 +1,23 @@
-import axios from "axios";
+// services/productServices.js
+import axios from "axios"
 
-const api = axios.create({
+export const api = axios.create({
     baseURL: 'https://dummyjson.com',
-    timeout: 1000
+    timeout: 10000
 })
 
-export function fetchProducts({ limit, skip }) {
-    return api.get('/products', {
-        params: {
-            limit,
-            skip
+export async function fetchProducts({ limit, skip }) {
+    try {
+        const {data} = await api.get('/products', {
+            params: {limit, skip}
+        })
+        return {
+            items: data.products,
+            total: data.total,
+            limit: data.limit,
+            skip: data.skip
         }
-    })
+    } catch (err) {
+        throw new Error(`Failed to fetch products: ${err.message}`)
+    }
 }

@@ -1,40 +1,59 @@
 // src/composables/useProducts
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { fetchProducts } from "@/services/productServices";
 
 export function useProducts() {
-    //state
     const products = ref([])
+    const total = ref(0)
+    const page = ref(1)
+    const perPage = ref(10)
     const loading = ref(false)
     const error = ref(null)
 
-    //parameter reaktif
-    const limitProduct = ref(10)
-    const skipProduct = ref(0)
+    const totalPages = computed(() =>
+        Math.ceil(total.value / perPage.value)
+    )
 
-    //fetch produk dengan filtering server side
-    const getProducts = async () => {
+    async function loadProducts() {
         try {
             loading.value = true
-            const response = await fetchProducts({
-                limit: limitProduct.value,
-                skip: skipProduct.value
+            error.value = null
+
+            if (page.value < 1) page.value = 1
+            if (page.value > totalPages.value && totalPages.value > 0) {
+                page.value = totalPages.value
+            }
+
+            const result = await fetchProducts({
+                limit: perPage.value,
+                skip: (page.value - 1) * perPage.value
             })
-            products.value = response.data.products
+            products.value = result.items
+            total.value = result.total
+
         } catch (err) {
             error.value = err.message
-            console.error('error fecthing products:', err)
         } finally {
             loading.value = false
         }
     }
 
-    return {
-        products,
-        loading,
-        error,
-        limitProduct,
-        skipProduct,
-        getProducts
+    async function nextPage() {
+        if (page.value >= totalPages.value) return
+        page.value += 1
+        await loadProducts()
     }
+
+    async function prevPage() {
+        if (page.value <= 1) return
+        page.value -= 1
+        await loadProducts()
+    }
+
+    async function applySearch() {
+        page.value = 1
+        await loadProducts()
+    }
+
+    return { products, total, totalPages, page, perPage, loading, error, loadProducts, nextPage, prevPage, applySearch }
 }

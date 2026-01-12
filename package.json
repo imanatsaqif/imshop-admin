@@ -8,7 +8,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "dev:mock": "cross-env VITE_MOCK_ENV=true vite",
+    "dev:real": "cross-env VITE_MOCK_ENV=false vite",
+    "build": "cross-env VITE_MOCK_ENV=false vite build",
+    "build:mock": "cross-env VITE_MOCK_ENV=true vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -17,12 +20,14 @@
     "@blibli/blue-font": "^3.0.10",
     "@blibli/blue.button": "^5.0.1",
     "axios": "^1.13.2",
+    "axios-mock-adapter": "^2.1.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.3",
+    "cross-env": "^10.1.0",
     "vite": "^7.3.0",
     "vite-plugin-vue-devtools": "^8.0.5"
   }
