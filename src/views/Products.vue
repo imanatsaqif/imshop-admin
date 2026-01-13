@@ -1,21 +1,86 @@
 <!-- views/Products.vue -->
+
+<template>
+  <h1>Products</h1>
+  <!-- Ganti value parameter reaktif -->
+  <div>
+    <label for="minPrice">Min ($)</label>
+    <input
+      id="minPrice"
+      type="number"
+      v-model.number="minPrice"
+      min="0"
+      placeholder="0"
+    >
+    <span>-</span>
+    <label for="maxPrice">Max ($)</label>
+    <input
+      id="maxPrice"
+      type="number"
+      v-model.number="maxPrice"
+      :min="minPrice"
+      placeholder="1000"
+    >
+    <p v-if="priceError">{{ priceError }}</p>
+  </div>
+  <hr>
+  <div v-if="loading"> Loading...</div>
+  <div v-else-if="error" class="error"> {{ error }}</div>
+  <div v-else>
+    <ProductCard
+      v-for="product in filteredPrice"
+      :key="product.id"
+      :product="product"
+      @select="handleSelectProduct"
+    >
+      <!-- Named slot: header -->
+      <template #header>
+        <h3 style="color: #2c3e50;">{{ product.title }}</h3>
+      </template>
+      
+      <!-- Default slot: content (clickable) -->
+      <div>
+        <p><strong>Price:</strong> ${{ product.price }}</p>
+        <p><strong>Category:</strong> {{ product.category }}</p>
+        <p><em>Click anywhere here to select product</em></p>
+      </div>
+      
+      <!-- Named slot: actions (non-clickable) -->
+      <template #actions>
+        <button @click="editProduct(product.id)" style="margin-right: 8px;">
+          Edit
+        </button>
+        <button @click="deleteProduct(product.id)" style="background: #ff6b6b; color: white;">
+          Delete
+        </button> 
+      </template>
+    </ProductCard>
+
+    <PaginationControls
+      :page="page"
+      :total-pages="totalPages"
+      :per-page="perPage"
+      @change-page="handleChangePage"
+      @change-per-page="handleChangePerPage" />
+  </div>
+</template>
+
 <script setup>
-import {onMounted} from 'vue';
-import {useProducts} from '@/composables/useProducts';
-import {usePriceFilter} from '@/composables/usePriceFilter';
+import { onMounted } from 'vue';
+import { useProducts } from '@/composables/useProducts';
+import { usePriceFilter } from '@/composables/usePriceFilter';
+
+import ProductCard from '@/components/ProductCard.vue';
+import PaginationControls from '@/components/PaginationControls.vue';
 
 const {
   products,
-  total,
   totalPages,
   page,
   perPage,
   loading,
   error,
   loadProducts,
-    nextPage,
-    prevPage,
-    applySearch
 } = useProducts()
 
 const {
@@ -28,55 +93,27 @@ const {
 onMounted(() => {
   loadProducts()
 })
-</script>
 
-<template>
-  <h1>Products</h1>
-  <!-- Ganti value parameter reaktif -->
-  <div class="flex-container">
-    <div>
-      <!-- filtering server side -->
-      <h2>Ganti Parameter</h2>
-      <span>Limit</span>
-      <input type="number" v-model="perPage">
-      <br>
-      <br>
-      <bliButton @click="applySearch()">Search</bliButton>
-    </div>
-    <div>
-      <!-- filtering locally -->
-      <h2>Tampilkan dengan Harga:</h2>
-      <label for="minPrice">Harga Minimal ($)</label>
-      <input id="minPrice" type="number" v-model.number="minPrice" min="0" placeholder="0">
-      <span>-</span>
-      <label for="maxPrice">Harga Maksimal ($)</label>
-      <input id="maxPrice" type="number" v-model.number="maxPrice" :min="minPrice" placeholder="1000">
-      <p v-if="priceError">{{ priceError }}</p>
-    </div>
-  </div>
-  <hr>
-  <div v-if="loading"> Loading...</div>
-  <div v-else-if="error" class="error"> {{ error }}</div>
-  <div v-else>
-    <!-- Product list bukan hasil dari API langsung tapi hasil olahan computed filteredPrice -->
-    <div v-for="product in filteredPrice" :key="product.id" class="product-card">
-      <h3>{{ product.title }}</h3>
-      <p>Price: {{ product.price }}</p>
-      <p>Category: {{ product.category }}</p>
-      <p>Id: {{ product.id }}</p>
-      <hr>
-    </div>
-    <div>
-      <p>You are in page {{ page }}, Showing: {{ total }} products in {{ totalPages }} pages</p>
-      <button v-if="page>1" @click="prevPage()">Previous Page</button>
-      <button v-if="page<totalPages" @click="nextPage()">Next Page</button>
-    </div>
-  </div>
-</template>
-
-<style scoped>
-.flex-container {
-  display: flex;
-  gap: 20px;
+function handleChangePage(newPage) {
+  page.value = newPage
+  loadProducts()
 }
-</style>
+
+function handleChangePerPage(newLimit) {
+  perPage.value = newLimit
+  page.value = 1
+  loadProducts()
+}
+
+function handleSelectProduct(id) {
+  console.log('Selected product', id)
+}
+
+function editProduct(id) {
+  console.log('Edit product', id)
+}
+
+function deleteProduct(id) {
+  console.log('Delete product', id)
+}
+</script>

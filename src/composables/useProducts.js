@@ -38,22 +38,5 @@ export function useProducts() {
         }
     }
 
-    async function nextPage() {
-        if (page.value >= totalPages.value) return
-        page.value += 1
-        await loadProducts()
-    }
-
-    async function prevPage() {
-        if (page.value <= 1) return
-        page.value -= 1
-        await loadProducts()
-    }
-
-    async function applySearch() {
-        page.value = 1
-        await loadProducts()
-    }
-
-    return { products, total, totalPages, page, perPage, loading, error, loadProducts, nextPage, prevPage, applySearch }
+    return { products, total, totalPages, page, perPage, loading, error, loadProducts }
 }
