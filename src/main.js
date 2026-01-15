@@ -18,7 +18,6 @@ const initializeApplication = async () => {
             const mockModule = await import('@mocks')
         } catch (error) {
             console.warn('Failed to load mock API:', error)
-            console.warn('Error stack:', error.stack)
         }
     }
 

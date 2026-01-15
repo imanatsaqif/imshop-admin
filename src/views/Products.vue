@@ -39,9 +39,9 @@ function handleChangePerPage(newLimit) {
   loadProducts()
 }
 
-// function handleSelectProduct(id) {
-//   console.log('Selected product', id)
-// }
+function handleSelectProduct(id) {
+  console.log('Selected product', id)
+}
 
 function editProduct(id) {
   console.log('Edit product', id)
@@ -83,6 +83,7 @@ function deleteProduct(id) {
       v-for="product in filteredPrice"
       :key="product.id"
       :product="product"
+      @select="handleSelectProduct"
     >
       <!-- Named slot: header -->
       <template #header>

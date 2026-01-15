@@ -1,4 +1,3 @@
-<!-- views/DashboardHome.vue -->
 <script setup>
 
 </script>

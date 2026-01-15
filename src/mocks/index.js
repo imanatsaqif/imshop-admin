@@ -3,6 +3,7 @@ import MockAdapter from "axios-mock-adapter"
 import { api } from "@/services/productServices"
 
 function setupMock() {
+
     if (import.meta.env.VITE_MOCK_ENV !== 'true') {
         return null
     }
@@ -57,6 +58,8 @@ function setupMock() {
             }
         ]
     })
+
+    console.log('MOCK INTERCEPTED - Returning mock data')
     return mock
 }
 

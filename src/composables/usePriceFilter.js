@@ -1,3 +1,4 @@
+// composables/usePriceFilter.js
 import { debounce } from "@/utils/debounce"
 import { ref, computed, watch } from "vue"
 
