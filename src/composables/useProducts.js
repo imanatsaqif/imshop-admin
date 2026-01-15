@@ -1,5 +1,5 @@
 // src/composables/useProducts
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { fetchProducts } from "@/services/productServices";
 
 export function useProducts() {
@@ -13,6 +13,18 @@ export function useProducts() {
     const totalPages = computed(() =>
         Math.ceil(total.value / perPage.value)
     )
+
+    const startTime = ref(null)
+    // Loading Timer
+    watch(loading, (isLoading, wasLoading) => {
+        if (isLoading && !wasLoading) {
+            startTime.value = Date.now()
+        } else if (!isLoading && wasLoading && startTime.value !== null) {
+            const duration = Date.now() - startTime.value
+            console.log(`Loading completed in ${duration}ms`)
+            startTime.value = null
+        }
+    })
 
     async function loadProducts() {
         try {

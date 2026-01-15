@@ -1,26 +1,4 @@
 <!-- components/PaginationControls.vue -->
-<template>
-    <div class="pagination">
-        <button v-if="page>1" @click="goPrev">Prev</button>
-        
-        <span>
-            Page {{ page }} of {{ totalPages }}
-        </span>
-
-        <button v-if="page<totalPages" @click="goNext">Next</button>
-
-        <div>
-            <label>Per Page:</label>
-            <input
-                type="number"
-                :value="perPage"
-                min="1"
-                @change="updatePerPage"
-            />
-        </div>
-    </div>
-</template>
-
 <script setup>
     const props = defineProps({
         page: {
@@ -55,3 +33,25 @@
         emit('change-per-page', Number(event.target.value))
     }
 </script>
+
+<template>
+    <div class="pagination">
+        <button v-if="page>1" @click="goPrev">Prev</button>
+        
+        <span>
+            Page {{ page }} of {{ totalPages }}
+        </span>
+
+        <button v-if="page<totalPages" @click="goNext">Next</button>
+
+        <div>
+            <label>Per Page:</label>
+            <input
+                type="number"
+                :value="perPage"
+                min="1"
+                @change="updatePerPage"
+            />
+        </div>
+    </div>
+</template>

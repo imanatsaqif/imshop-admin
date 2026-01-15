@@ -1,4 +1,19 @@
 <!-- components/ProductCard.vue -->
+<script setup>
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
+  }
+})
+
+const emit = defineEmits(['select'])
+
+function handleClick() {
+  emit('select', props.product.id)
+}
+</script>
+
 <template>
   <div class="product-card">
     <!-- Header slot -->
@@ -24,21 +39,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true
-  }
-})
-
-const emit = defineEmits(['select'])
-
-function handleClick() {
-  emit('select', props.product.id)
-}
-</script>
 
 <style scoped>
 .product-card {

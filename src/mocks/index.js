@@ -3,18 +3,13 @@ import MockAdapter from "axios-mock-adapter"
 import { api } from "@/services/productServices"
 
 function setupMock() {
-    console.log('MOCK CHECK - VITE_MOCK_ENV:', import.meta.env.VITE_MOCK_ENV)
-
     if (import.meta.env.VITE_MOCK_ENV !== 'true') {
-        console.log('Mock setup skipped - VITE_MOCK_ENV is not true')
         return null
     }
 
-    console.log('Setting up mock adapter...')
     const mock = new MockAdapter(api, { delayResponse: 500 })
 
     mock.onGet("/products").reply(config => {
-        console.log('✅ MOCK INTERCEPTED - Returning mock data')
         const { limit = 10, skip = 0 } = config.params || {}
 
         const allProducts = [
@@ -62,8 +57,6 @@ function setupMock() {
             }
         ]
     })
-
-    console.log('Mock setup complete')
     return mock
 }
 
