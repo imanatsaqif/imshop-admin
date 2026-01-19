@@ -15,7 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@blibli/blue-design-tokens": "^4.0.0",
+    "@blibli/blue-design-tokens": "^3.1.5",
     "@blibli/blue-dls-utils": "^3.2.0",
     "@blibli/blue-font": "^3.0.10",
     "@blibli/blue.button": "^5.0.1",

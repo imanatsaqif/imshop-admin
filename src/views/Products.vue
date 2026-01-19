@@ -1,6 +1,6 @@
 <!-- views/Products.vue -->
 <script setup>
-import { onMounted, nextTick, ref } from "vue";
+import { onMounted, nextTick, ref, inject } from "vue";
 import { useProducts } from "@/composables/useProducts";
 import { usePriceFilter } from "@/composables/usePriceFilter";
 
@@ -60,6 +60,8 @@ onMounted(() => {
     focusMinPriceInput();
   });
 });
+
+const theme = inject("theme");
 </script>
 
 <template>

@@ -4,12 +4,54 @@
 @use '@blibli/blue-font/dist/_blue-font-blibli' as *;
 
 /* Design tokens */
-@use '@blibli/blue-design-tokens/dist/web/scss/tokens-default' as tokens;
+@use '@blibli/blue-design-tokens/dist/web/scss/tokens-default' as defaultTokens;
+@use '@blibli/blue-design-tokens/dist/web/scss/tokens-dark' as darkTokens;
+
+:root {
+  /* COLORS: Neutral (Light Mode) */
+  --blu-color-neutral-background-default: #{defaultTokens.$blu-color-neutral-background-default};
+  --blu-color-neutral-background-low: #{defaultTokens.$blu-color-neutral-background-low};
+  --blu-color-neutral-background-high: #{defaultTokens.$blu-color-neutral-background-high};
+  
+  --blu-color-neutral-text-high: #{defaultTokens.$blu-color-neutral-text-high};
+  --blu-color-neutral-text-med: #{defaultTokens.$blu-color-neutral-text-med};
+  --blu-color-neutral-text-low: #{defaultTokens.$blu-color-neutral-text-low};
+
+  --blu-color-neutral-border-default: #{defaultTokens.$blu-color-neutral-border-default};
+
+  /* COLORS: Primary / Brand */
+  --blu-color-primary-main: #{defaultTokens.$blu-color-blue-50};
+  --blu-color-primary-hover: #{defaultTokens.$blu-color-blue-60};
+  
+  /* TYPOGRAPHY */
+  --blu-font-family-body: #{defaultTokens.$blu-font-family-body-text};
+}
+
+[data-theme="dark"] {
+  /* COLORS: Neutral (Dark Mode) */
+  --blu-color-neutral-background-default: #{darkTokens.$blu-color-neutral-background-default};
+  --blu-color-neutral-background-low: #{darkTokens.$blu-color-neutral-background-low};
+  --blu-color-neutral-background-high: #{darkTokens.$blu-color-neutral-background-high};
+
+  --blu-color-neutral-text-high: #{darkTokens.$blu-color-neutral-text-high};
+  --blu-color-neutral-text-med: #{darkTokens.$blu-color-neutral-text-med};
+  --blu-color-neutral-text-low: #{darkTokens.$blu-color-neutral-text-low};
+
+  --blu-color-neutral-border-default: #{darkTokens.$blu-color-neutral-border-default};
+
+  /* COLORS: Primary / Brand (Dark Mode Adjusted if needed) */
+  /* Biasanya primary color tetap sama atau sedikit disesuaikan */
+  --blu-color-primary-main: #{darkTokens.$blu-color-blue-40}; 
+  --blu-color-primary-hover: #{darkTokens.$blu-color-blue-50};
+}
+
 
 /* Global styling */
 body {
-  font-family: tokens.$blu-font-family-body-text;
-  background-color: #f8f9fa;
+  font-family: var(--blu-font-family-body);
+  background-color: var(--blu-color-neutral-background-default);
+  color: var(--blu-color-neutral-text-high);
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
