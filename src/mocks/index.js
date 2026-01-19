@@ -1,6 +1,6 @@
 // mocks/index.js - VERSI CLEAN
 import MockAdapter from "axios-mock-adapter"
-import { api } from "@/services/productServices"
+import { api } from "@/services/api"
 
 function setupMock() {
 
@@ -9,6 +9,19 @@ function setupMock() {
     }
 
     const mock = new MockAdapter(api, { delayResponse: 500 })
+
+    const allUsers = [
+        { id: 1, firstName: "John", lastName: "Doe", email: "john@example.com", role: "admin" },
+        { id: 2, firstName: "Jane", lastName: "Smith", email: "jane@example.com", role: "user" },
+        { id: 3, firstName: "Jill", lastName: "Lars", email: "jill@example.com", role: "admin" },
+        { id: 4, firstName: "Gill", lastName: "Mars", email: "gill@example.com", role: "user" },
+        { id: 5, firstName: "Ron", lastName: "Lee", email: "Ron@example.com", role: "admin" },
+        { id: 6, firstName: "Lucas", lastName: "Smith", email: "Lucas@example.com", role: "user" },
+        { id: 7, firstName: "Diana", lastName: "Wellington", email: "Diana@example.com", role: "admin" },
+        { id: 8, firstName: "Rose", lastName: "Willocks", email: "Rose@example.com", role: "user" },
+        { id: 9, firstName: "William", lastName: "Dafoe", email: "William@example.com", role: "admin" },
+        { id: 10, firstName: "Cindy", lastName: "Amitra", email: "Cindy@example.com", role: "user" },
+    ];
 
     mock.onGet("/products").reply(config => {
         const { limit = 10, skip = 0 } = config.params || {}
@@ -53,6 +66,45 @@ function setupMock() {
             {
                 products: paginated,
                 total: allProducts.length,
+                limit,
+                skip
+            }
+        ]
+    })
+
+    mock.onGet("/users").reply(config => {
+        const { limit = 10, skip = 0 } = config.params || {}
+
+        const paginated = allUsers.slice(skip, skip + limit)
+
+        return [
+            200,
+            {
+                users: paginated,
+                total: allUsers.length,
+                limit,
+                skip
+            }
+        ]
+    })
+
+    mock.onGet("/users/search").reply(config => {
+        const { q = "", limit = 10, skip = 0 } = config.params || {}
+
+        const filtered = allUsers.filter(user =>
+            q === '' ||
+            user.firstName.toLowerCase().includes(q.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(q.toLowerCase()) ||
+            user.email.toLowerCase().includes(q.toLowerCase())
+        )
+
+        const paginated = filtered.slice(skip, skip + limit)
+
+        return [
+            200,
+            {
+                users: paginated,
+                total: filtered.length,
                 limit,
                 skip
             }

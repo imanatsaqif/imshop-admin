@@ -1,10 +1,5 @@
 // services/productServices.js
-import axios from "axios"
-
-export const api = axios.create({
-    baseURL: 'https://dummyjson.com',
-    timeout: 10000
-})
+import { api } from "./api"
 
 export async function fetchProducts({ limit, skip }) {
     try {
