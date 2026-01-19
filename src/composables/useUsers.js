@@ -70,10 +70,14 @@ export function useUsers() {
   }
 
   async function searchUsers(query) {
-    searchMode.value = true;
-    searchQuery.value = query;
-    page.value = 1;
-    await loadUsers();
+    if (query) {
+      searchMode.value = true;
+      searchQuery.value = query;
+      page.value = 1;
+      await loadUsers();
+    } else {
+      clearSearch();
+    }
   }
 
   return {

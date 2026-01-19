@@ -44,7 +44,12 @@ loadUsers();
 
   <!-- Search Section -->
   <div>
-    <input v-model="searchQuery" placeholder="Search users..." />
+    <input
+      @keyup.enter="searchUsers(searchQuery)"
+      v-focus
+      v-model="searchQuery"
+      placeholder="Search users..."
+    />
     <button @click="searchUsers(searchQuery)">Search</button>
     <button v-if="searchMode" @click="clearSearch">Clear</button>
   </div>
