@@ -37,69 +37,69 @@ loadUsers();
 </script>
 
 <template>
-  <h1>Users Management</h1>
+  <div class="page-container">
+    <h1>Users Management</h1>
 
-  <div class="theme-badge" :class="theme">Theme: {{ theme }}</div>
+    <div class="search-section">
+      <input
+        @keyup.enter="searchUsers(searchQuery)"
+        v-focus
+        v-model="searchQuery"
+        placeholder="Search users..."
+      />
+      <button class="btn btn-primary" @click="searchUsers(searchQuery)">
+        Search
+      </button>
+      <button v-if="searchMode" class="btn btn-outline" @click="clearSearch">
+        Clear
+      </button>
+    </div>
 
-  <div class="search-section">
-    <input
-      @keyup.enter="searchUsers(searchQuery)"
-      v-focus
-      v-model="searchQuery"
-      placeholder="Search users..."
-    />
-    <button class="btn btn-primary" @click="searchUsers(searchQuery)">
-      Search
-    </button>
-    <button v-if="searchMode" class="btn btn-outline" @click="clearSearch">
-      Clear
-    </button>
+    <div v-if="loading" class="state loading-state">
+      <BliLoaderGeneral size="xl" />
+    </div>
+    <div v-else-if="error" class="state error-state">{{ error }}</div>
+
+    <div v-else-if="users.length > 0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td>{{ user.id }}</td>
+            <td>{{ user.firstName }} {{ user.lastName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td class="actions">
+              <button class="btn btn-soft" @click="editUser(user.id)">
+                Edit
+              </button>
+              <button class="btn btn-danger" @click="deleteUser(user.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Pagination -->
+      <PaginationControls
+        :page="page"
+        :total-pages="totalPages"
+        :per-page="perPage"
+        @change-page="handleChangePage"
+        @change-per-page="handleChangePerPage"
+      />
+    </div>
+
+    <div v-else class="state empty-state">No users found.</div>
   </div>
-
-  <div v-if="loading" class="state loading-state">
-    <BliLoaderGeneral size="xl" />
-  </div>
-  <div v-else-if="error" class="state error-state">{{ error }}</div>
-
-  <div v-else-if="users.length > 0">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Role</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <td>{{ user.id }}</td>
-          <td>{{ user.firstName }} {{ user.lastName }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role }}</td>
-          <td class="actions">
-            <button class="btn btn-soft" @click="editUser(user.id)">
-              Edit
-            </button>
-            <button class="btn btn-danger" @click="deleteUser(user.id)">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- Pagination -->
-    <PaginationControls
-      :page="page"
-      :total-pages="totalPages"
-      :per-page="perPage"
-      @change-page="handleChangePage"
-      @change-per-page="handleChangePerPage"
-    />
-  </div>
-
-  <div v-else class="state empty-state">No users found.</div>
 </template>
 
 <style scoped>
@@ -110,33 +110,8 @@ h1 {
   color: var(--blu-color-neutral-text-high);
 }
 
-/* Theme badge */
-.theme-badge {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--blu-color-neutral-border-default);
-  margin-bottom: 1.5rem;
-}
-
-.theme-badge.light {
-  background: color-mix(
-    in srgb,
-    var(--blu-color-primary-main) 10%,
-    transparent
-  );
-  color: var(--blu-color-primary-main);
-}
-
-.theme-badge.dark {
-  background: color-mix(
-    in srgb,
-    var(--blu-color-primary-main) 20%,
-    transparent
-  );
-  color: var(--blu-color-blue-40);
+.page-container {
+  padding: 1.5rem;
 }
 
 /* Search */

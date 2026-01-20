@@ -62,86 +62,86 @@ const theme = inject("theme");
 </script>
 
 <template>
-  <h1>Products</h1>
+  <div class="page-container">
+    <h1>Products</h1>
 
-  <div class="theme-badge" :class="theme">Theme: {{ theme }}</div>
+    <!-- Filters -->
+    <div class="filter-section">
+      <div class="filter-field">
+        <label for="minPrice">Min ($)</label>
+        <input
+          id="minPrice"
+          ref="minPriceInputRef"
+          type="number"
+          v-model.number="minPrice"
+          min="0"
+          placeholder="0"
+        />
+      </div>
 
-  <!-- Filters -->
-  <div class="filter-section">
-    <div class="filter-field">
-      <label for="minPrice">Min ($)</label>
-      <input
-        id="minPrice"
-        ref="minPriceInputRef"
-        type="number"
-        v-model.number="minPrice"
-        min="0"
-        placeholder="0"
+      <span class="dash">-</span>
+
+      <div class="filter-field">
+        <label for="maxPrice">Max ($)</label>
+        <input
+          id="maxPrice"
+          type="number"
+          v-model.number="maxPrice"
+          :min="minPrice"
+          placeholder="1000"
+        />
+      </div>
+    </div>
+
+    <!-- States -->
+    <div v-if="loading" class="state loading-state">
+      <BliLoaderGeneral size="xl" />
+    </div>
+
+    <div v-else-if="error" class="state error-state">
+      {{ error }}
+    </div>
+
+    <div v-else-if="priceError" class="state error-state">
+      {{ priceError }}
+    </div>
+
+    <!-- Products -->
+    <div v-else-if="filteredPrice.length > 0">
+      <div ref="productListRef" class="products-grid">
+        <ProductCard
+          v-for="product in filteredPrice"
+          :key="product.id"
+          :product="product"
+          @select="handleSelectProduct"
+        >
+          <template #actions>
+            <button class="btn btn-soft" @click.stop="editProduct(product.id)">
+              Edit
+            </button>
+            <button
+              class="btn btn-danger"
+              @click.stop="deleteProduct(product.id)"
+            >
+              Delete
+            </button>
+          </template>
+        </ProductCard>
+      </div>
+
+      <!-- Pagination -->
+      <PaginationControls
+        :page="page"
+        :total-pages="totalPages"
+        :per-page="perPage"
+        @change-page="handleChangePage"
+        @change-per-page="handleChangePerPage"
       />
     </div>
 
-    <span class="dash">-</span>
-
-    <div class="filter-field">
-      <label for="maxPrice">Max ($)</label>
-      <input
-        id="maxPrice"
-        type="number"
-        v-model.number="maxPrice"
-        :min="minPrice"
-        placeholder="1000"
-      />
-    </div>
+    <!-- Empty -->
+    <div v-else class="state empty-state">No products found.</div>
   </div>
-
-  <!-- States -->
-  <div v-if="loading" class="state loading-state">
-    <BliLoaderGeneral size="xl" />
-  </div>
-
-  <div v-else-if="error" class="state error-state">
-    {{ error }}
-  </div>
-
-  <div v-else-if="priceError" class="state error-state">
-    {{ priceError }}
-  </div>
-
-  <!-- Products -->
-  <div v-else-if="filteredPrice.length > 0">
-    <div ref="productListRef" class="products-grid">
-      <ProductCard
-        v-for="product in filteredPrice"
-        :key="product.id"
-        :product="product"
-        @select="handleSelectProduct"
-      >
-        <template #actions>
-          <button class="btn btn-soft" @click.stop="editProduct(product.id)">
-            Edit
-          </button>
-          <button
-            class="btn btn-danger"
-            @click.stop="deleteProduct(product.id)"
-          >
-            Delete
-          </button>
-        </template>
-      </ProductCard>
-    </div>
-
-    <!-- Pagination -->
-    <PaginationControls
-      :page="page"
-      :total-pages="totalPages"
-      :per-page="perPage"
-      @change-page="handleChangePage"
-      @change-per-page="handleChangePerPage"
-    />
-  </div>
-
-  <!-- Empty -->
-  <div v-else class="state empty-state">No products found.</div>
 </template>
 
 <style scoped>
@@ -152,33 +152,8 @@ h1 {
   color: var(--blu-color-neutral-text-high);
 }
 
-/* Theme badge */
-.theme-badge {
-  display: inline-block;
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--blu-color-neutral-border-default);
-  margin-bottom: 1.5rem;
-}
-
-.theme-badge.light {
-  background: color-mix(
-    in srgb,
-    var(--blu-color-primary-main) 10%,
-    transparent
-  );
-  color: var(--blu-color-primary-main);
-}
-
-.theme-badge.dark {
-  background: color-mix(
-    in srgb,
-    var(--blu-color-primary-main) 20%,
-    transparent
-  );
-  color: var(--blu-color-blue-40);
+.page-container {
+  padding: 1.5rem;
 }
 
 /* Filters */

@@ -37,11 +37,6 @@ const formattedRevenue = computed(() => {
   <div class="dashboard-container">
     <h1 class="dashboard-title">Dashboard Overview</h1>
 
-    <!-- Simple theme indicator -->
-    <div class="theme-indicator">
-      Current theme: <strong>{{ theme }}</strong> (via provide/inject)
-    </div>
-
     <!-- Stats Grid -->
     <div class="dashboard-grid">
       <div class="stat-card product-card">

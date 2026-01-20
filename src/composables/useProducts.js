@@ -6,7 +6,7 @@ export function useProducts() {
   const products = ref([]);
   const total = ref(0);
   const page = ref(1);
-  const perPage = ref(10);
+  const perPage = ref(8);
   const loading = ref(false);
   const error = ref(null);
 
