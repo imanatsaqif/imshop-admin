@@ -1,12 +1,26 @@
 <script setup>
-import { ref, computed, inject } from "vue";
+import { ref, computed, inject, onMounted } from "vue";
+import { useProducts } from "@/composables/useProducts";
+import { useUsers } from "@/composables/useUsers";
 
-// 🔥 INJECT theme dari DashboardLayout
 const theme = inject("theme");
 
+const {
+  total: totalProducts,
+  perPage,
+  loading: productsLoading,
+  loadProducts,
+} = useProducts();
+
+const { total: totalUsers, loading: usersLoading, loadUsers } = useUsers();
+
+onMounted(() => {
+  perPage.value = 1;
+  loadProducts();
+  loadUsers();
+});
+
 // Stat data
-const totalProducts = ref(127);
-const totalUsers = ref(12);
 const revenue = ref(12450);
 
 // Computed untuk formatted revenue
@@ -33,21 +47,32 @@ const formattedRevenue = computed(() => {
       <div class="stat-card product-card">
         <div class="stat-content">
           <h3 class="stat-label">Total Products</h3>
-          <p class="stat-value">{{ totalProducts }}</p>
+
+          <div class="stat-body">
+            <BliLoaderGeneral v-if="productsLoading" size="m" />
+            <p v-else class="stat-value">{{ totalProducts }}</p>
+          </div>
         </div>
       </div>
 
       <div class="stat-card user-card">
         <div class="stat-content">
           <h3 class="stat-label">Total Users</h3>
-          <p class="stat-value">{{ totalUsers }}</p>
+
+          <div class="stat-body">
+            <BliLoaderGeneral v-if="usersLoading" size="m" />
+            <p v-else class="stat-value">{{ totalUsers }}</p>
+          </div>
         </div>
       </div>
 
       <div class="stat-card revenue-card">
         <div class="stat-content">
           <h3 class="stat-label">Total Revenue</h3>
-          <p class="stat-value">{{ formattedRevenue }}</p>
+
+          <div class="stat-body">
+            <p class="stat-value">{{ formattedRevenue }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -106,6 +131,12 @@ const formattedRevenue = computed(() => {
 
 .stat-content {
   flex: 1;
+}
+
+.stat-body {
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .stat-label {

@@ -19,6 +19,8 @@
     "@blibli/blue-dls-utils": "^3.2.0",
     "@blibli/blue-font": "^3.0.10",
     "@blibli/blue.button": "^5.0.1",
+    "@blibli/blue.carousel-indicator": "^5.0.2",
+    "@blibli/blue.loader-general": "^5.0.1",
     "axios": "^1.13.2",
     "axios-mock-adapter": "^2.1.0",
     "pinia": "^3.0.4",
