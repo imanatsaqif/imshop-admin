@@ -1,9 +1,13 @@
 <script setup>
-import { ref, computed, inject, onMounted } from "vue";
+import { ref, computed, inject, onMounted, defineAsyncComponent } from "vue";
 import { useProducts } from "@/composables/useProducts";
 import { useUsers } from "@/composables/useUsers";
 
 const theme = inject("theme");
+
+const SimpleChart = defineAsyncComponent(
+  () => import("@/components/SimpleChart.vue"),
+);
 
 const {
   total: totalProducts,
@@ -31,6 +35,17 @@ const formattedRevenue = computed(() => {
     minimumFractionDigits: 0,
   }).format(revenue.value);
 });
+
+const showChart = ref(false);
+const chartData = ref([
+  { name: "Product A", value: 100 },
+  { name: "Product B", value: 200 },
+  { name: "Product C", value: 150 },
+]);
+
+function toggleChart() {
+  showChart.value = !showChart.value;
+}
 </script>
 
 <template>
@@ -69,6 +84,21 @@ const formattedRevenue = computed(() => {
             <p class="stat-value">{{ formattedRevenue }}</p>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="stats-container">
+      <button @click="toggleChart" class="btn">
+        {{ showChart ? "Hide Chart" : "Show Chart" }}
+      </button>
+      <div v-if="showChart">
+        <Suspense>
+          <template #default>
+            <SimpleChart :data="chartData" />
+          </template>
+          <template #fallback>
+            <BliLoaderGeneral size="m" />
+          </template>
+        </Suspense>
       </div>
     </div>
   </div>
