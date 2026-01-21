@@ -23,7 +23,6 @@ export async function fetchInstagramMedia(
     });
     return response.data;
   } catch (error) {
-    // Error handling mengikuti pola project Anda
     console.error(
       "Instagram Service Error:",
       error.response?.data || error.message,
