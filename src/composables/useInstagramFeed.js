@@ -1,6 +1,6 @@
 // src/composables/useInstagramFeed.js
 import { ref, computed, watch } from "vue";
-import { fetchInstagramMedia } from "@/services/instagramService";
+import { fetchInstagramMedia } from "@/services/instagramServices";
 
 export function useInstagramFeed() {
   const posts = ref([]);
