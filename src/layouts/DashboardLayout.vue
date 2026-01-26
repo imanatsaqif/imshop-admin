@@ -24,10 +24,6 @@ function toggleTheme() {
   applyTheme(newTheme);
 }
 
-const themeLabel = computed(() => {
-  return theme.value === "light" ? "Dark Mode" : "Light Mode";
-});
-
 onMounted(() => {
   const savedTheme = localStorage.getItem("imshop-theme");
   if (savedTheme) {
