@@ -26,12 +26,6 @@ const routes = [
         meta: { title: "Users" },
       },
       {
-        path: "stats",
-        name: "stats",
-        component: () => import("@/views/Stats.vue"),
-        meta: { title: "Stats" },
-      },
-      {
         path: "marketing",
         name: "marketing",
         component: () => import("@/views/Marketing.vue"),
